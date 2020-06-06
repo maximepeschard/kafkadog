@@ -43,7 +43,7 @@ $ kafkadog consume -b mybroker:9092 -f '%t.%p.%o -> %v' my_topic
 Read messages starting at the oldest available offset and print their value on stdout :
 
 ```console
-$ kafkadog consume -b mybroker:9092 my_topic
+$ kafkadog consume -b mybroker:9092 -s oldest my_topic
 ```
 
 ### Producer
