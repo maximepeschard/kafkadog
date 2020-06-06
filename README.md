@@ -1,3 +1,7 @@
+[![Release](https://img.shields.io/github/v/release/maximepeschard/kafkadog.svg)](https://github.com/maximepeschard/kafkadog/releases/latest)
+[![Release](https://github.com/maximepeschard/kafkadog/workflows/Release/badge.svg)](https://github.com/maximepeschard/kafkadog/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/maximepeschard/kafkadog)](https://goreportcard.com/report/github.com/maximepeschard/kafkadog)
+
 # kafkadog
 
 A Kafka consumer/producer CLI. Barking version of [Kafkacat](https://github.com/edenhill/kafkacat).
