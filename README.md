@@ -2,6 +2,24 @@
 
 A Kafka consumer/producer CLI. Barking version of [Kafkacat](https://github.com/edenhill/kafkacat).
 
+## Installation
+
+### Homebrew
+
+```console
+$ brew install maximepeschard/tap/kafkadog
+```
+
+### go get
+
+```console
+$ go get github.com/maximepeschard/kafkadog
+```
+
+### Binary
+
+Grab the [latest release](https://github.com/maximepeschard/kafkadog/releases/latest) for your platform.
+
 ## Example usage
 
 ### Consumer
