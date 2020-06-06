@@ -20,3 +20,10 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+brews:
+  - github:
+      owner: maximepeschard
+      name: homebrew-tap
+    folder: Formula
+    homepage: https://github.com/maximepeschard/kafkadog
+    description: Kafka consumer/producer CLI
