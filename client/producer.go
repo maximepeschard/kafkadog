@@ -14,6 +14,7 @@ type Producer struct {
 // NewProducer returns a Producer for the given broker.
 func NewProducer(broker string) (Producer, error) {
 	config := sarama.NewConfig()
+	config.Version = sarama.V0_10_1_0
 	config.Producer.Return.Successes = true
 	config.Producer.Return.Errors = true
 	client, err := sarama.NewClient([]string{broker}, config)

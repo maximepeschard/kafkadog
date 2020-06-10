@@ -18,6 +18,7 @@ type Consumer struct {
 // NewConsumer returns a Consumer for the given broker.
 func NewConsumer(broker string) (Consumer, error) {
 	config := sarama.NewConfig()
+	config.Version = sarama.V0_10_1_0
 	client, err := sarama.NewClient([]string{broker}, config)
 	if err != nil {
 		return Consumer{}, err
@@ -32,7 +33,7 @@ func NewConsumer(broker string) (Consumer, error) {
 }
 
 // Consume reads messages from topic and sends them to the given chan until ctx is done.
-func (c Consumer) Consume(ctx context.Context, topic string, startOffset int64, messages chan<- Message) error {
+func (c Consumer) Consume(ctx context.Context, topic string, startTime int64, messages chan<- Message) error {
 	partitions, err := c.consumer.Partitions(topic)
 	if err != nil {
 		return err
@@ -42,6 +43,11 @@ func (c Consumer) Consume(ctx context.Context, topic string, startOffset int64, 
 
 	// We need to read separately each partition of the topic.
 	for _, p := range partitions {
+		startOffset, err := c.client.GetOffset(topic, p, startTime)
+		if err != nil {
+			return err
+		}
+
 		pc, err := c.consumer.ConsumePartition(topic, p, startOffset)
 		if err != nil {
 			fmt.Println(err)
