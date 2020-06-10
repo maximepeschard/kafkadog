@@ -46,6 +46,18 @@ Read messages starting at the oldest available offset and print their value on s
 $ kafkadog consume -b mybroker:9092 -s oldest my_topic
 ```
 
+Read messages starting from a date (in UTC timezone) and print their value on stdout :
+
+```console
+$ kafkadog consume -b mybroker:9092 -s '2020-06-10 00:00:00' my_topic
+```
+
+Read messages starting from a UNIX timestamp (in milliseconds) and print their value on stdout :
+
+```console
+$ kafkadog consume -b mybroker:9092 -s 1591747200000 my_topic
+```
+
 ### Producer
 
 Produce one message :
