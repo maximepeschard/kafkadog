@@ -33,7 +33,7 @@ func NewConsumer(broker string) (Consumer, error) {
 }
 
 // Consume reads messages from topic and sends them to the given chan until ctx is done.
-func (c Consumer) Consume(ctx context.Context, topic string, startOffset int64, messages chan<- Message) error {
+func (c Consumer) Consume(ctx context.Context, topic string, startTime int64, messages chan<- Message) error {
 	partitions, err := c.consumer.Partitions(topic)
 	if err != nil {
 		return err
@@ -43,6 +43,11 @@ func (c Consumer) Consume(ctx context.Context, topic string, startOffset int64, 
 
 	// We need to read separately each partition of the topic.
 	for _, p := range partitions {
+		startOffset, err := c.client.GetOffset(topic, p, startTime)
+		if err != nil {
+			return err
+		}
+
 		pc, err := c.consumer.ConsumePartition(topic, p, startOffset)
 		if err != nil {
 			fmt.Println(err)

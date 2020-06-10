@@ -14,7 +14,7 @@ import (
 func init() {
 	rootCmd.AddCommand(consumeCmd)
 	consumeCmd.Flags().StringP("broker", "b", "localhost:9092", "bootstrap broker")
-	consumeCmd.Flags().StringP("start", "s", "newest", "offset to start reading from : newest | oldest")
+	consumeCmd.Flags().StringP("start", "s", "newest", "offset or time to start reading from\n"+client.StartHelp())
 	consumeCmd.Flags().StringP("format", "f", client.ValuePlaceholder, "message output format\n"+client.FormatterHelp())
 }
 
@@ -37,7 +37,7 @@ var consumeCmd = &cobra.Command{
 			return err
 		}
 
-		startOffset, err := client.ParseStart(start)
+		startTime, err := client.ParseStart(start)
 		if err != nil {
 			return err
 		}
@@ -64,7 +64,7 @@ var consumeCmd = &cobra.Command{
 		messages := make(chan client.Message, client.MessageBufferSize)
 
 		go func() {
-			err = c.Consume(ctx, topic, startOffset, messages)
+			err = c.Consume(ctx, topic, startTime, messages)
 			close(messages)
 		}()
 
