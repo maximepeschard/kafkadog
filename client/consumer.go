@@ -18,6 +18,7 @@ type Consumer struct {
 // NewConsumer returns a Consumer for the given broker.
 func NewConsumer(broker string) (Consumer, error) {
 	config := sarama.NewConfig()
+	config.Version = sarama.V0_10_1_0
 	client, err := sarama.NewClient([]string{broker}, config)
 	if err != nil {
 		return Consumer{}, err
