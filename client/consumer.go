@@ -8,6 +8,24 @@ import (
 	"github.com/Shopify/sarama"
 )
 
+// A ConsumerRequest specifies what to consume and how.
+type ConsumerRequest struct {
+	Topic     string
+	StartTime int64
+	Quit      bool
+}
+
+// NewConsumerRequest returns a ConsumerRequest.
+func NewConsumerRequest(topic string, startTime int64, quit bool) ConsumerRequest {
+	cr := ConsumerRequest{
+		Topic:     topic,
+		StartTime: startTime,
+		Quit:      quit,
+	}
+
+	return cr
+}
+
 // Consumer is a high level API for a Kafka consumer.
 type Consumer struct {
 	broker   string
