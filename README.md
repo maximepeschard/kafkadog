@@ -88,13 +88,6 @@ $ kafkadog produce -b mybroker:9092 -f messages.txt my_topic
 
 Run `kafkadog -h` for detailed usage and help.
 
-## TODO
-
-* √ Improve start offset/time selection for consumer.
-* √ Add an "quit" option to stop consuming when the log head is reached.
-* Fix "key delimiter" option -> "key-delimiter"
-* Fix ineffectual assignments (https://goreportcard.com/report/github.com/maximepeschard/kafkadog#ineffassign)
-
 ## Credits
 
 * [Shopify/sarama](https://github.com/Shopify/sarama)
