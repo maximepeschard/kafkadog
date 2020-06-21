@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Valid format string placeholders.
@@ -19,14 +20,13 @@ const (
 // FormatterHelp returns a message describing format tokens.
 func FormatterHelp() string {
 	var b strings.Builder
-	fmt.Fprint(&b, "* available format tokens :\n")
-	fmt.Fprintf(&b, "%s : topic\n", TopicPlaceholder)
-	fmt.Fprintf(&b, "%s : partition\n", PartitionPlaceholder)
-	fmt.Fprintf(&b, "%s : offset\n", OffsetPlaceholder)
-	fmt.Fprintf(&b, "%s : timestamp\n", TimestampPlaceholder)
-	fmt.Fprintf(&b, "%s : message key\n", KeyPlaceholder)
-	fmt.Fprintf(&b, "%s : message value\n", ValuePlaceholder)
-	fmt.Fprint(&b, "* example format string : 'received %v from %t'")
+	fmt.Fprintf(&b, "* %s : topic\n", TopicPlaceholder)
+	fmt.Fprintf(&b, "* %s : partition\n", PartitionPlaceholder)
+	fmt.Fprintf(&b, "* %s : offset\n", OffsetPlaceholder)
+	fmt.Fprintf(&b, "* %s : timestamp (epoch in milliseconds)\n", TimestampPlaceholder)
+	fmt.Fprintf(&b, "* %s : message key\n", KeyPlaceholder)
+	fmt.Fprintf(&b, "* %s : message value\n", ValuePlaceholder)
+	fmt.Fprint(&b, "(example format string : 'received %v from %t')")
 	return b.String()
 }
 
@@ -46,7 +46,7 @@ func (f Formatter) Format(m Message) string {
 		TopicPlaceholder, m.Topic,
 		PartitionPlaceholder, strconv.FormatInt(int64(m.Partition), 10),
 		OffsetPlaceholder, strconv.FormatInt(m.Offset, 10),
-		TimestampPlaceholder, strconv.FormatInt(m.Timestamp.Unix(), 10),
+		TimestampPlaceholder, strconv.FormatInt(m.Timestamp.UnixNano()/int64(time.Millisecond), 10),
 		KeyPlaceholder, string(m.Key),
 		ValuePlaceholder, string(m.Value),
 	)

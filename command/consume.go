@@ -14,8 +14,9 @@ import (
 func init() {
 	rootCmd.AddCommand(consumeCmd)
 	consumeCmd.Flags().StringP("broker", "b", "localhost:9092", "bootstrap broker")
-	consumeCmd.Flags().StringP("start", "s", "newest", "offset or time to start reading from\n"+client.StartHelp())
-	consumeCmd.Flags().StringP("format", "f", client.ValuePlaceholder, "message output format\n"+client.FormatterHelp())
+	consumeCmd.Flags().StringP("start", "s", "now", "when to start reading from :\n"+client.StartHelp())
+	consumeCmd.Flags().StringP("end", "e", "never", "when to stop reading :\n"+client.EndHelp())
+	consumeCmd.Flags().StringP("format", "f", client.ValuePlaceholder, "message output format, using format tokens :\n"+client.FormatterHelp())
 }
 
 var consumeCmd = &cobra.Command{
@@ -28,7 +29,11 @@ var consumeCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		start, err := cmd.Flags().GetString("start")
+		startStr, err := cmd.Flags().GetString("start")
+		if err != nil {
+			return err
+		}
+		endStr, err := cmd.Flags().GetString("end")
 		if err != nil {
 			return err
 		}
@@ -37,11 +42,23 @@ var consumeCmd = &cobra.Command{
 			return err
 		}
 
-		startTime, err := client.ParseStart(start)
+		start, err := client.ParseStart(startStr)
+		if err != nil {
+			return err
+		}
+		end, err := client.ParseEnd(endStr)
 		if err != nil {
 			return err
 		}
 		formatter := client.NewFormatter(format)
+
+		req, err := client.NewConsumerRequest(topic, start, end)
+		if err != nil {
+			return err
+		}
+
+		// At this point, input is validated and errors should not display usage.
+		rootCmd.SilenceUsage = true
 
 		c, err := client.NewConsumer(broker)
 		if err != nil {
@@ -64,7 +81,7 @@ var consumeCmd = &cobra.Command{
 		messages := make(chan client.Message, client.MessageBufferSize)
 
 		go func() {
-			err = c.Consume(ctx, topic, startTime, messages)
+			err = c.Consume(ctx, req, messages)
 			close(messages)
 		}()
 
