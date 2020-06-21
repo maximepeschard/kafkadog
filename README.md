@@ -58,6 +58,12 @@ Read messages starting from a UNIX timestamp (in milliseconds) and print their v
 $ kafkadog consume -b mybroker:9092 -s 1591747200000 my_topic
 ```
 
+Read messages starting at the oldest available offset and ending at a date (in UTC timezone) :
+
+```console
+$ kafkadog consume -b mybroker:9092 -s oldest -e '2020-06-10 00:00:00' my_topic
+```
+
 ### Producer
 
 Produce one message :
@@ -81,6 +87,13 @@ $ kafkadog produce -b mybroker:9092 -f messages.txt my_topic
 ## Detailed usage
 
 Run `kafkadog -h` for detailed usage and help.
+
+## TODO
+
+* √ Improve start offset/time selection for consumer.
+* √ Add an "quit" option to stop consuming when the log head is reached.
+* Fix "key delimiter" option -> "key-delimiter"
+* Fix ineffectual assignments (https://goreportcard.com/report/github.com/maximepeschard/kafkadog#ineffassign)
 
 ## Credits
 
